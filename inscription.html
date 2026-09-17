@@ -228,7 +228,7 @@
 </header>
 
 <div class="wrap">
-  <form id="regForm" action="https://formspree.io/f/meaoqolj" method="POST" enctype="multipart/form-data">  
+<form id="regForm" action="https://formspree.io/f/meaoqolj" method="POST">  
 
     <div class="card">
       <div class="section-title"><span class="badge">1</span> Informations générales <span class="ar">المعلومات العامة</span></div>
@@ -270,10 +270,11 @@
       <label class="required">Email <span class="ar">البريد الإلكتروني</span></label>
       <input type="email" name="email" required>
 
-      <label class="required">Photo + copie de l'acte de naissance <span class="ar">صورة + شهادة الميلاد</span></label>
-      <input type="file" name="photo_acte" accept="image/*,.pdf" required>
-      <div class="file-hint">Photo d'identité et copie de l'acte de naissance (image ou PDF)</div>
-    </div>
+      <label>Photo + copie de l'acte de naissance <span class="ar">صورة + شهادة الميلاد</span></label>
+<div class="note">
+  Documents à remettre directement au club lors de la finalisation de l'inscription.
+  <span class="ar">تُسلّم الوثائق مباشرة للنادي عند استكمال التسجيل.</span>
+</div>
 
     <div class="card">
       <div class="section-title"><span class="badge">2</span> Sport choisi <span class="ar">رياضة مختارة</span></div>
@@ -290,7 +291,10 @@
     <div class="card">
       <div class="section-title"><span class="badge">3</span> Certificat médical <span class="ar">شهادة طبية</span></div>
       <label>Copie du certificat médical signé par le médecin <span class="ar">شهادة طبية موقعة من الطبيب</span></label>
-      <input type="file" name="certificat_medical" accept="image/*,.pdf">
+<div class="note">
+  Certificat médical à remettre directement au club.
+  <span class="ar">تُسلّم الشهادة الطبية مباشرة للنادي.</span>
+</div>
       <div class="file-hint">Ce certificat doit être établi et signé par un médecin — joindre le scan/photo ici.</div>
     </div>
 
@@ -324,7 +328,10 @@
     <div class="card">
       <div class="section-title"><span class="badge">6</span> Pièce jointe finale <span class="ar">وثيقة موقعة</span></div>
       <label>Scan de la fiche papier signée et tamponnée par la mairie (si déjà disponible) <span class="ar">توقيع وختم البلدية</span></label>
-      <input type="file" name="signature_mairie" accept="image/*,.pdf">
+      <div class="note">
+  Document à remettre directement au club lorsqu'il sera disponible.
+  <span class="ar">تُسلّم الوثيقة مباشرة للنادي عند توفرها.</span>
+</div>
       <div class="note">Si vous n'avez pas encore ce document, vous pouvez l'apporter le jour de l'inscription au club. Ce formulaire en ligne permet de préparer le dossier à l'avance.</div>
     </div>
 
@@ -505,16 +512,10 @@ async function buildOfficialPDF(data){
   doc.text('Pi\u00e8ces jointes s\u00e9par\u00e9ment : ' + attachedList.join(', ') + '.', 14, 283);
 
   return doc.output('blob');
-}
-
-form.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-
-  if(FORMSPREE_URL.includes("YOUR_FORM_ID")){
-    statusEl.className = 'err';
-    statusEl.textContent = "Configuration incomplète : l'administrateur du site doit encore relier ce formulaire à Formspree.";
-    return;
-  }
+form.addEventListener('submit', () => {
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Envoi en cours... / جاري الإرسال";
+});
 
   submitBtn.disabled = true;
   statusEl.className = 'loading';
